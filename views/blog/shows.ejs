@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= post.metaTitle || post.title %></title>
+  <% if (post.metaDescription) { %><meta name="description" content="<%= post.metaDescription %>"><% } %>
+  <% if (post.metaKeywords) { %><meta name="keywords" content="<%= post.metaKeywords %>"><% } %>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- 共通ヘッダー（固定メニュー） -->
+  <%- include('../partials/header') %>
+
+  <main style="max-width:860px;margin:24px auto;padding:0 16px">
+    <h1><%= post.title %></h1>
+    <div style="color:#666;font-size:14px;margin-bottom:16px">
+      <span>カテゴリ: <%= post.category %></span>
+      <% if (post.publishedAt) { %> | <time><%= new Date(post.publishedAt).toLocaleDateString('ja-JP') %></time><% } %>
+    </div>
+
+    <% if (post.coverImage) { %>
+      <div style="margin:12px 0 24px"><img src="<%= post.coverImage %>" alt="" style="width:100%;border-radius:12px"></div>
+    <% } %>
+
+    <!-- 記事本文（HTMLをそのまま描画） -->
+    <article class="content post-content"><%- post.content %></article>
+
+    <% if (related && related.length) { %>
+      <section style="margin-top:48px">
+        <h2>関連コラム</h2>
+        <div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+          <% related.forEach(r=>{ %>
+            <a href="/blog/<%= r.slug %>" style="text-decoration:none;color:#333">
+              <% if (r.coverImage) { %><img src="<%= r.coverImage %>" alt="" style="width:100%;border-radius:8px"><% } %>
+              <h3 style="margin:8px 0 0"><%= r.title %></h3>
+            </a>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+  </main>
+
+  <!-- 共通フッター -->
+  <%- include('../partials/footer') %>
+  <!-- 共通CTAバー（コースと同じ） -->
+  <%- include('../partials/floating-cta') %>
+
+  <!-- ヘッダーの開閉など共通JS -->
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="気軽に始められるウクレレレッスン。自由が丘から徒歩2分のティールミュージックスクールのウクレレコースで、やさしい音色を奏でよう。">
+  <meta name="keywords" content="自由が丘 ウクレレ教室, 自由が丘 ウクレレレッスン, 自由が丘 ウクレレ, 自由が丘 ウクレレスクール, 自由が丘 弾き語り">
+  <title>ウクレレコース｜ティールミュージックスクール</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/course.css" />
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="course-page">
+    <section class="course-card">
+      <div class="course-header">
+        <h1 class="course-name-en">Ukulele Course</h1>
+        <p class="course-name-ja">ウクレレコース</p>
+      </div>
+    
+      <div class="course-image-container">
+        <img src="/images/courses/ukulele.webp" alt="ウクレレコースのイメージ">
+      </div>
+    
+      <div class="course-description">
+        <p>
+          初心者にも優しい楽器ウクレレを、楽しく丁寧にレッスン。コードの押さえ方やリズムの刻み方など、1曲弾ける楽しさを大切にした内容です。
+        </p>
+      </div>
+    
+      <div class="feature-text">
+        <h2>コースの特徴</h2>
+        <ul>
+          <li>小さくて扱いやすい楽器で手軽にスタート</li>
+          <li>コード進行と簡単な伴奏スタイルから習得</li>
+          <li>弾き語り・ソロスタイルどちらも対応</li>
+          <li>親子でのレッスンや趣味の仲間作りにも</li>
+        </ul>
+      </div>
+    
+      <div class="feature-text">
+        <h2>こんな方におすすめ</h2>
+        <ul>
+          <li>楽器に初めて挑戦する</li>
+          <li>気軽に音楽を楽しみたい</li>
+          <li>小さなお子さんや親子で楽しみたい</li>
+          <li>カフェや屋外で演奏してみたい</li>
+        </ul>
+      </div>
+    </section>
+    <section class="course-faq">
+      <div class="faq-container">
+        <h2>よくあるご質問</h2>
+        <ul class="faq-list">
+          <li>
+            <strong>Q1. ウクレレは初めて触ります。大丈夫ですか？</strong>
+            <p>はい、大丈夫です。初心者の方にもやさしく始められる楽器です。体験時は貸し出しも可能ですし、購入についてのアドバイスも行っています。</p>
+          </li>
+          <li>
+            <strong>Q2. 課題曲などありますか？</strong>
+            <p>特に決まっていません。お好きな曲からスタートできます。</p>
+          </li>
+          <li>
+            <strong>Q3. 子どもでも習えますか？</strong>
+            <p>はい、手が小さいお子さまにも扱いやすい楽器です。</p>
+          </li>
+          <li>
+            <strong>Q4. ウクレレは買わないとダメですか？</strong>
+            <p>体験用の楽器をご用意していますのでご安心ください。</p>
+          </li>
+          <li>
+            <strong>Q5. ソロ弾きも教えてもらえますか？</strong>
+            <p>もちろんです。コード弾きだけでなくソロ演奏も指導可能です。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="trial-section theme-teal">
+      <div class="trial-inner">
+        <p class="trial-catch">＼ まずは体験から♪ ／</p>
+        <p class="trial-subtext">お気軽にお申し込みください（オンライン・対面どちらもOK）</p>
+    
+        <a
+          href="https://ws.formzu.net/fgen/S562550293/"
+          class="trial-button large"
+          target="_blank"
+          rel="noopener"
+        >
+          無料体験レッスンを申し込む
+        </a>
+    
+        <ul class="trial-badges">
+          <li>初心者OK</li>
+          <li>無料楽器レンタル</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="related-posts">
+      <h2>関連コラム</h2>
+    
+      <% if (latestPosts && latestPosts.length) { %>
+        <div class="post-grid">
+          <% latestPosts.forEach(p => { %>
+            <a href="/posts/<%= p.slug %>" class="post-card">
+              <img
+                src="<%= p.coverImage || '/images/blog/placeholder.jpg' %>"
+                alt="<%= p.title %>">
+              <h3><%= p.title %></h3>
+              <% if (p.excerpt) { %><p class="excerpt"><%= p.excerpt %></p><% } %>
+              <small class="date"><%= new Date(p.publishedAt).toLocaleDateString('ja-JP') %></small>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>まだ関連コラムはありません。</p>
+      <% } %>
+    </section>
+    
+    <style>
+    .related-posts { margin-top: 60px; }
+    .related-posts .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 16px;
+    }
+    .post-card { display:block; text-decoration:none; color:#333; border-radius:10px; padding:8px; }
+    .post-card img { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; }
+    .post-card h3 { font-size:1rem; margin:8px 0 4px; line-height:1.35; }
+    .post-card .excerpt { font-size:.9rem; color:#555; margin:0 0 6px; }
+    .post-card .date { color:#777; }
+    </style>
+  
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/floating-cta') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

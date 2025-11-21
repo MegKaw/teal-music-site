@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="リズムの要、ベースをしっかり習得。初心者から経験者まで、自由が丘のティールミュージックスクールのベースコースでグルーヴを磨こう。">
+  <meta name="keywords" content="自由が丘 ベース教室, 自由が丘 ベースレッスン, 初心者 ベース, 自由が丘 音楽スクール, グルーヴ, リズム, ベース, ベーシスト, バンド">
+  <title>ベースコース｜ティールミュージックスクール</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/course.css" />
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="course-page">
+
+    <section class="course-card">
+      <div class="course-header">
+        <h1 class="course-name-en">Bass Course</h1>
+        <p class="course-name-ja">ベースコース</p>
+      </div>
+  
+      <div class="course-image-container">
+        <img src="/images/courses/bass.webp" alt="ベースコースのイメージ">
+      </div>
+  
+      <div class="course-description">
+        <p>
+          ベースの基本的な奏法からリズム感・グルーヴのトレーニングまで、音楽の土台を支える楽しさを学びます。初心者の方には指弾き・ピック奏法など基礎から丁寧に、経験者にはアンサンブルやフレーズ構築まで対応。スタジオでのセッション形式レッスンも可能です。
+        </p>
+      </div>
+      <div class="feature-text">
+        <h2>コースの特徴</h2>
+        <ul>
+          <li>ルート弾きからグルーヴ感のあるライン構築まで対応</li>
+          <li>ピック弾き・指弾き・スラップなど奏法指導</li>
+          <li>セッション・バンド向けの実践的レッスン</li>
+          <li>ドラムとのリズム連携を意識したトレーニング</li>
+        </ul>
+      </div>
+  
+      <div class="feature-text">
+        <h2>こんな方におすすめ</h2>
+        <ul>
+          <li>バンドの低音を支えたい</li>
+          <li>初心者から基礎をしっかり身につけたい</li>
+          <li>他の楽器経験からベースに挑戦したい</li>
+          <li>グルーヴを楽しみながら演奏したい</li>
+        </ul>
+      </div>
+    </section>
+    <section class="trial-section theme-teal">
+      <div class="trial-inner">
+        <p class="trial-catch">＼ まずは体験から♪ ／</p>
+        <p class="trial-subtext">お気軽にお申し込みください（オンライン・対面どちらもOK）</p>
+    
+        <a
+          href="https://ws.formzu.net/fgen/S562550293/"
+          class="trial-button large"
+          target="_blank"
+          rel="noopener"
+        >
+          無料体験レッスンを申し込む
+        </a>
+    
+        <ul class="trial-badges">
+          <li>初心者OK</li>
+          <li>無料楽器レンタル</li>
+        </ul>
+      </div>
+    </section>
+  
+    <section class="course-faq">
+      <div class="faq-container">
+        <h2>よくあるご質問</h2>
+        <ul class="faq-list">
+          <li>
+            <strong>Q1. ベースってどんな役割があるんですか？</strong>
+            <p>曲の土台を支える低音パートで、リズムとハーモニーの両方を担います。</p>
+          </li>
+          <li>
+            <strong>Q2. 課題曲などありますか？</strong>
+            <p>好きな曲から始められます。講師と相談しながら、自分に合った課題曲を決められます。</p>
+          </li>
+          <li>
+            <strong>Q3. 指弾きとピック弾き、どちらを学べますか？</strong>
+            <p>どちらにも対応しています。好きなアーティストや曲に合わせてスタイルを決めましょう。</p>
+          </li>
+          <li>
+            <strong>Q4. 手が小さくてもベースは弾けますか？</strong>
+            <p>もちろん大丈夫です。ショートスケールのベースなど、扱いやすい楽器もありますので楽器購入のご相談にも乗ります。</p>
+          </li>
+          <li>
+            <strong>Q5. バンドで演奏することに興味があります。対応してますか？</strong>
+            <p>はい、セッションイベントなど実践的な機会も設けていますし、生徒さん同士の交流の場にもなっています。実践的な経験が積めるようサポートします。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="related-posts">
+      <h2>関連コラム</h2>
+    
+      <% if (latestPosts && latestPosts.length) { %>
+        <div class="post-grid">
+          <% latestPosts.forEach(p => { %>
+            <a href="/posts/<%= p.slug %>" class="post-card">
+              <img
+                src="<%= p.coverImage || '/images/blog/placeholder.jpg' %>"
+                alt="<%= p.title %>">
+              <h3><%= p.title %></h3>
+              <% if (p.excerpt) { %><p class="excerpt"><%= p.excerpt %></p><% } %>
+              <small class="date"><%= new Date(p.publishedAt).toLocaleDateString('ja-JP') %></small>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>まだ関連コラムはありません。</p>
+      <% } %>
+    </section>
+    
+    <style>
+    .related-posts { margin-top: 60px; }
+    .related-posts .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 16px;
+    }
+    .post-card { display:block; text-decoration:none; color:#333; border-radius:10px; padding:8px; }
+    .post-card img { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; }
+    .post-card h3 { font-size:1rem; margin:8px 0 4px; line-height:1.35; }
+    .post-card .excerpt { font-size:.9rem; color:#555; margin:0 0 6px; }
+    .post-card .date { color:#777; }
+    </style>
+
+  </main>
+  <%- include('../partials/footer') %>
+  <%- include('../partials/floating-cta') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

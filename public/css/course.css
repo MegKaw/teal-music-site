@@ -1,0 +1,271 @@
+/* コースページ全体 */
+.course-page {
+    background-color: #fdfdfd;
+    padding: 3rem 1rem 6rem;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    background-color: #0288D1;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #0277BD;
+  }
+  
+  .arrow-large {
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .arrow-large .arrow-icon-svg {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+ 
+
+/* ヒーロー部分 */
+
+/* カード型セクション全体 */
+
+.course-card {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  padding: 2rem 1.5rem;
+}
+
+.course-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.course-name-en {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.course-name-ja {
+  font-size: 1rem;
+  color: #777;
+  margin-top: 0.3rem;
+}
+
+.course-image-container {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.course-image-container img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background-color: #eee;
+}
+
+.course-description p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+
+  
+  .feature-text {
+    flex: 1;
+    padding: 1.5rem;
+  }
+  
+  .feature-text h2 {
+    font-size: 1.6rem;
+    color: #18cb96;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-text ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    color: #444;
+    line-height: 1.8;
+  }
+
+
+  /* Q&Aセクション */
+
+.course-faq {
+  background-color: #ffffff;
+  padding: 3rem 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid #ccc;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-container h2 {
+  text-align: center;
+  color: #18cb96;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.faq-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.faq-list li {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.faq-list li:hover {
+  background-color: #f1fbf8;
+}
+
+.faq-list li strong {
+  display: block;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.faq-list li p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .faq-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .faq-list li strong {
+    font-size: 1rem;
+  }
+
+  .faq-list li p {
+    font-size: 0.95rem;
+  }
+}
+  
+  /* --- 無料体験セクション --- */
+/* --- theme-teal minimal --- */
+.theme-teal {
+  text-align: center;
+  background: #ffffff;
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: 20px auto 80px;
+}
+
+/* 見出し（＼ ／） */
+.theme-teal .trial-catch {
+  display: inline-block;
+  font-weight: 800;
+  color: #00b7a2;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+/* サブテキスト */
+.theme-teal .trial-subtext {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 40px;
+}
+
+/* 大ボタン */
+
+/* 暖色寄りボタン（ティール背景と相性良いサーモンピンク系） */
+.theme-teal .trial-button.large {
+  display: inline-block;
+  background: #fd5a5a; 
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.3rem;
+  padding: 22px 70px;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.theme-teal .trial-button.large:hover {
+  background: linear-gradient(135deg, #ff7f7f, #ffb199);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(255, 107, 107, 0.45);
+}
+
+.theme-teal .trial-button.large::after {
+  content: "›"; /* 半角の>より角が取れた形で見栄えが良い */
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 1.4em;
+  line-height: 0;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+
+.theme-teal .trial-button.large:hover::after {
+  transform: translateX(4px);
+}
+
+/* バッジ */
+.theme-teal .trial-badges {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+.theme-teal .trial-badges li {
+  list-style: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid #00b7a2;
+  background: #fff;
+  color: #005e56;
+}
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+  .theme-teal .trial-catch { font-size: 1.4rem; }
+  .theme-teal .trial-button.large {
+    font-size: 1.1rem;
+    padding: 18px 40px;
+    width: 90%;
+  }
+}

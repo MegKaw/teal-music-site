@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://teal-music.com/sitemap.xml

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="演技・歌・ダンスの総合力を養う自由が丘のミュージカルコース。舞台経験豊富な講師が一人ひとりを丁寧にサポートします。">
+  <meta name="keywords" content="自由が丘 ミュージカル教室, 自由が丘 声楽レッスン, 自由が丘 舞台, 自由が丘 演技, 自由が丘 ダンス, 自由が丘 音楽スクール">
+  <title>声楽・ミュージカルコース｜ティールミュージックスクール</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/course.css" />
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="course-page">
+    <section class="course-card">
+      <div class="course-header">
+        <h1 class="course-name-en">Musical / Classical Voice Course</h1>
+        <p class="course-name-ja">ミュージカル・声楽コース</p>
+      </div>
+    
+      <div class="course-image-container">
+        <img src="/images/courses/musical.webp" alt="ミュージカルコースのイメージ">
+      </div>
+    
+      <div class="course-description">
+        <p>
+          クラシックの発声法に基づくミュージカル・声楽指導。呼吸・共鳴・滑舌を丁寧にトレーニングし、舞台映えする声と表現力を育てます。
+        </p>
+      </div>
+    
+      <div class="feature-text">
+        <h2>コースの特徴</h2>
+        <ul>
+          <li>腹式呼吸・共鳴・発音・表情まで総合指導</li>
+          <li>ミュージカルナンバーやクラシック歌曲に対応</li>
+          <li>舞台向けの演技・発声の一体化レッスン</li>
+          <li>音大・劇団受験対策も可能</li>
+        </ul>
+      </div>
+    
+      <div class="feature-text">
+        <h2>こんな方におすすめ</h2>
+        <ul>
+          <li>ミュージカルや声楽に興味がある</li>
+          <li>ステージでしっかりと響く声を出したい</li>
+          <li>クラシックの基礎から学びたい</li>
+          <li>オーディション・受験の準備をしたい</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="course-faq">
+      <div class="faq-container">
+        <h2>よくあるご質問</h2>
+        <ul class="faq-list">
+          <li>
+            <strong>Q1. ミュージカルは初めてです。大丈夫ですか？</strong>
+            <p>はい、初心者の方も大歓迎です。発声や表現力から学べます。</p>
+          </li>
+          <li>
+            <strong>Q2. 課題曲などありますか？</strong>
+            <p>特に決まっていませんので、興味のある作品から始められます。またご希望によっては講師より基礎的な練習曲を提案することも可能です。</p>
+          </li>
+          <li>
+            <strong>Q3. 演技も含まれますか？</strong>
+            <p>はい、歌と演技を組み合わせたレッスンも可能です。</p>
+          </li>
+          <li>
+            <strong>Q4. クラシック声楽との違いはありますか？</strong>
+            <p>発声や表現の方向性が異なりますが、両方学ぶことも可能です。</p>
+          </li>
+          <li>
+            <strong>Q5. 発表の場はありますか？</strong>
+            <p>希望者向けに発表の機会もご用意しています。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="trial-section theme-teal">
+      <div class="trial-inner">
+        <p class="trial-catch">＼ まずは体験から♪ ／</p>
+        <p class="trial-subtext">お気軽にお申し込みください（オンライン・対面どちらもOK）</p>
+    
+        <a
+          href="https://ws.formzu.net/fgen/S562550293/"
+          class="trial-button large"
+          target="_blank"
+          rel="noopener"
+        >
+          無料体験レッスンを申し込む
+        </a>
+    
+        <ul class="trial-badges">
+          <li>初心者OK</li>
+          <li>無料楽器レンタル</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="related-posts">
+      <h2>関連コラム</h2>
+    
+      <% if (latestPosts && latestPosts.length) { %>
+        <div class="post-grid">
+          <% latestPosts.forEach(p => { %>
+            <a href="/posts/<%= p.slug %>" class="post-card">
+              <img
+                src="<%= p.coverImage || '/images/blog/placeholder.jpg' %>"
+                alt="<%= p.title %>">
+              <h3><%= p.title %></h3>
+              <% if (p.excerpt) { %><p class="excerpt"><%= p.excerpt %></p><% } %>
+              <small class="date"><%= new Date(p.publishedAt).toLocaleDateString('ja-JP') %></small>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>まだ関連コラムはありません。</p>
+      <% } %>
+    </section>
+    
+    <style>
+    .related-posts { margin-top: 60px; }
+    .related-posts .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 16px;
+    }
+    .post-card { display:block; text-decoration:none; color:#333; border-radius:10px; padding:8px; }
+    .post-card img { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; }
+    .post-card h3 { font-size:1rem; margin:8px 0 4px; line-height:1.35; }
+    .post-card .excerpt { font-size:.9rem; color:#555; margin:0 0 6px; }
+    .post-card .date { color:#777; }
+    </style>
+  
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/floating-cta') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

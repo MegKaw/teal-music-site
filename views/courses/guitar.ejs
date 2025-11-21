@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="初心者から経験者まで対応。自由が丘のティールミュージックスクールではあなたの音楽活動をサポートします。アコースティックもエレキもOK！">
+  <meta name="keywords" content="自由が丘 ギター教室, 自由が丘 ギターレッスン, 自由が丘 アコースティックギター, 自由が丘 エレキギター, 自由が丘 初心者ギター, 自由が丘 音楽スクール">
+  <title>ギターコース｜ティールミュージックスクール</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/course.css" />
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="course-page">
+    <section class="course-card">
+      <div class="course-header">
+        <h1 class="course-name-en">Guitar Course</h1>
+        <p class="course-name-ja">ギターコース</p>
+      </div>
+    
+      <div class="course-image-container">
+        <img src="/images/courses/guitar.webp" alt="ギターコースのイメージ">
+      </div>
+    
+      <div class="course-description">
+        <p>
+          アコースティック・エレキ問わず、初心者から経験者まで対応。コード・ストローク・リードプレイなど多彩なスタイルに対応し、好きな曲で楽しく学べます。
+        </p>
+      </div>
+    
+      <div class="feature-text">
+        <h2>コースの特徴</h2>
+        <ul>
+          <li>コード弾きからソロ演奏まで幅広く対応</li>
+          <li>アコギ・エレキそれぞれの魅力に応じたレッスン</li>
+          <li>耳コピやアドリブの力も養成</li>
+          <li>作曲や弾き語りの指導も可能</li>
+        </ul>
+      </div>
+    
+      <div class="feature-text">
+        <h2>こんな方におすすめ</h2>
+        <ul>
+          <li>好きな曲をギターで弾きたい</li>
+          <li>ギターを始めたいけど何から始めたらいいかわからない</li>
+          <li>自己流から一歩先に進みたい</li>
+          <li>セッションやライブで活躍したい</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="course-faq">
+      <div class="faq-container">
+        <h2>よくあるあるご質問</h2>
+        <ul class="faq-list">
+          <li>
+            <strong>Q1. 楽器を持っていないのですが大丈夫ですか？</strong>
+            <p>はい、大丈夫です。レッスン時は教室のものを貸し出ししております。また購入についてのアドバイスも行っています。</p>
+          </li>
+          <li>
+            <strong>Q2. まったくの初心者でも大丈夫ですか？</strong>
+            <p>はい、ギターの持ち方から始め、楽譜が読めなくてもコードの読み方やコードの押さえ方まで丁寧に指導します。</p>
+          </li>
+          <li>
+            <strong>Q3. アコースティックギターとエレキギター、どちらを習えますか？</strong>
+            <p>両方対応しています。ご希望に合わせて選んでいただけますし、いつでも変更可能です。</p>
+          </li>
+          <li>
+            <strong>Q4. 指が小さいのですが弾けますか？</strong>
+            <p>問題ありません。手が小さい人も多く習っておられて皆さん好きな曲を弾けるようになられています。押さえやすいコードから始め、楽器の選び方もアドバイスします。</p>
+          </li>
+          <li>
+            <strong>Q5. 課題曲などありますか？</strong>
+            <p>特にありませんので、好きな曲から始められます。ご希望に応じて課題曲の提案も可能です。</p>
+          </li>
+          <li>
+            <strong>Q6. 発表会や人前で演奏する機会はありますか？</strong>
+            <p>希望者向けに発表イベントやセッションの場もご用意しています。もちろん参加は自由です。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="trial-section theme-teal">
+      <div class="trial-inner">
+        <p class="trial-catch">＼ まずは体験から♪ ／</p>
+        <p class="trial-subtext">お気軽にお申し込みください（オンライン・対面どちらもOK）</p>
+    
+        <a
+          href="https://ws.formzu.net/fgen/S562550293/"
+          class="trial-button large"
+          target="_blank"
+          rel="noopener"
+        >
+          無料体験レッスンを申し込む
+        </a>
+    
+        <ul class="trial-badges">
+          <li>初心者OK</li>
+          <li>無料楽器レンタル</li>
+        </ul>
+      </div>
+    </section>
+    <section class="related-posts">
+      <h2>関連コラム</h2>
+    
+      <% if (latestPosts && latestPosts.length) { %>
+        <div class="post-grid">
+          <% latestPosts.forEach(p => { %>
+            <a href="/posts/<%= p.slug %>" class="post-card">
+              <img
+                src="<%= p.coverImage || '/images/blog/placeholder.jpg' %>"
+                alt="<%= p.title %>">
+              <h3><%= p.title %></h3>
+              <% if (p.excerpt) { %><p class="excerpt"><%= p.excerpt %></p><% } %>
+              <small class="date"><%= new Date(p.publishedAt).toLocaleDateString('ja-JP') %></small>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p>まだ関連コラムはありません。</p>
+      <% } %>
+    </section>
+    
+    <style>
+    .related-posts { margin-top: 60px; }
+    .related-posts .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 16px;
+    }
+    .post-card { display:block; text-decoration:none; color:#333; border-radius:10px; padding:8px; }
+    .post-card img { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; }
+    .post-card h3 { font-size:1rem; margin:8px 0 4px; line-height:1.35; }
+    .post-card .excerpt { font-size:.9rem; color:#555; margin:0 0 6px; }
+    .post-card .date { color:#777; }
+    </style>
+
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/floating-cta') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title><%= post.metaTitle || post.title %></title>
+<% if (post.metaDescription) { %><meta name="description" content="<%= post.metaDescription %>"><% } %>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+main{max-width:860px;margin:24px auto;padding:0 16px}
+.hero{margin:12px 0 24px}.hero img{width:100%;border-radius:12px}
+.meta{color:#666;font-size:14px;margin-bottom:16px}
+.content :is(h1,h2,h3){margin-top:1.5em}
+.related{margin-top:48px}.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{text-decoration:none;color:#333}.card img{width:100%;border-radius:8px}
+/* 本文内の画像：幅はそのまま、高さをやや抑制 */
+
+    /* 関連記事：横長サムネ、背の低いカード */
+    .related-posts { margin-top: 48px; }
+    .related-posts .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap: 16px;
+    }
+    .related-posts .post-card{
+      display:block; text-decoration:none; color:#222; border:1px solid #eee;
+      border-radius:10px; overflow:hidden; background:#fff;
+    }
+    .related-posts .post-card img{
+      width:100%;
+      height:150px;          /* ここで背を低くする */
+      object-fit:cover;      /* 横長トリミング */
+    }
+    .related-posts .post-card h3{
+      font-size:1rem; margin:8px 12px 12px; line-height:1.3;
+    }
+
+</style>
+</head><body>
+<main>
+  <h1><%= post.title %></h1>
+  <div class="meta">
+    <span>カテゴリ: <%= post.category %></span>
+    <% if (post.publishedAt) { %> | <time><%= new Date(post.publishedAt).toLocaleDateString('ja-JP') %></time><% } %>
+  </div>
+
+  <% if (post.coverImage) { %><div class="hero"><img src="<%= post.coverImage %>" alt=""></div><% } %>
+
+  <article class="content post-content"><%- post.content %></article>
+
+  <% if (related && related.length) { %>
+    <section class="related">
+      <h2>関連コラム</h2>
+      <div class="grid">
+        <% related.forEach(r=>{ %>
+          <a class="card" href="/blog/<%= r.slug %>">
+            <% if (r.coverImage) { %><img src="<%= r.coverImage %>" alt=""><% } %>
+            <h3><%= r.title %></h3>
+          </a>
+        <% }) %>
+      </div>
+    </section>
+  <% } %>
+</main>
+</body></html>

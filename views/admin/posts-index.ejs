@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投稿一覧 | TEAL</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left}
+    .badge{padding:2px 8px;border-radius:9999px;font-size:.8rem}
+    .pub{background:#dcfce7;color:#065f46}
+    .draft{background:#fee2e2;color:#991b1b}
+    .actions a,.actions form{display:inline-block;margin-right:8px}
+    img.thumb{width:56px;height:56px;object-fit:cover;border-radius:6px}
+  </style>
+</head>
+<body>
+  <main class="container" style="max-width:1000px;margin:24px auto;">
+    <h1>投稿一覧</h1>
+    <p><a href="/admin/posts/new" class="btn">＋ 新規作成</a></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>サムネ</th><th>タイトル</th><th>カテゴリ</th><th>状態</th><th>作成日</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (posts.length === 0) { %>
+          <tr><td colspan="6">投稿はまだありません。</td></tr>
+        <% } %>
+        <% posts.forEach(p => { %>
+          <tr>
+            <td><% if(p.thumbnail){ %><img class="thumb" src="<%= p.thumbnail %>" alt=""><% } %></td>
+            <td><%= p.title %></td>
+            <td><%= p.category %></td>
+            <td>
+              <% if(p.published){ %>
+                <span class="badge pub">公開</span>
+              <% } else { %>
+                <span class="badge draft">下書き</span>
+              <% } %>
+            </td>
+            <td><%= new Date(p.createdAt).toLocaleString('ja-JP') %></td>
+            <td class="actions">
+              <a href="/admin/posts/<%= p.id %>/edit">編集</a>
+              <form method="POST" action="/admin/posts/<%= p.id %>/delete" onsubmit="return confirm('削除しますか？')">
+                <button>削除</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

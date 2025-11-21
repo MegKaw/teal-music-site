@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= article.title %>｜TEAL MUSIC SCHOOL</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/blog.css" />
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="article-page">
+    <div class="article-container">
+      <img src="<%= article.image %>" alt="<%= article.title %>" class="article-thumb" />
+      <h1><%= article.title %></h1>
+      <p class="article-date"><%= article.date %></p>
+      <div class="article-content">
+        <%- article.content %>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/floating-cta') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>
