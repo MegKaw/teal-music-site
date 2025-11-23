@@ -225,106 +225,27 @@ router.get("/", async (req, res) => {
 });
 
 // =============== ③ 講師別・週カレンダーで新規予約 ===============
+// 新規予約フォーム: /admin/reservations/new
+// ※カレンダーから ?slotId=xxx 付きで来る前提
 router.get("/new", async (req, res) => {
   try {
-    const teacherValue = req.query.teacher || "";
-    const baseDate = req.query.date ? new Date(req.query.date) : new Date();
-    const { monday, sunday } = getWeekRange(baseDate);
+    const slotId = req.query.slotId;
 
-    const teacherList = teachers;
-
-    let days = [];
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      days.push({
-        date: d,
-        slots: [],
-      });
+    // slotId なしで来たらカレンダーへ戻す
+    if (!slotId) {
+      return res.redirect("/admin/reservations/calendar");
     }
 
-    if (!teacherValue) {
-      return res.render("admin/reservations/new", {
-        teacherList,
-        selectedTeacher: "",
-        days,
-        monday,
-        sunday,
-      });
+    const selectedSlot = await Slot.findById(slotId).lean();
+    if (!selectedSlot) {
+      return res.status(404).send("slot_not_found");
     }
 
-    const slots = await Slot.find({
-      date: { $gte: monday, $lte: sunday },
-      isActive: { $ne: false },
-      teacher: teacherValue,
-    })
-      .sort({ date: 1, startTime: 1 })
-      .lean();
-
-    const groupMap = new Map();
-
-    slots.forEach((slot) => {
-      const key = makeGroupKey(slot.date, slot.startTime);
-      if (!groupMap.has(key)) {
-        groupMap.set(key, {
-          date: slot.date,
-          startTime: slot.startTime,
-          totalInGroup: 0,
-          isFull: false,
-        });
-      }
-    });
-
-    const groupEntries = Array.from(groupMap.entries());
-
-    await Promise.all(
-      groupEntries.map(async ([key, g]) => {
-        const sameSlots = await Slot.find({
-          isActive: { $ne: false },
-          date: g.date,
-          startTime: g.startTime,
-        })
-          .select("_id")
-          .lean();
-
-        const sameIds = sameSlots.map((s) => s._id);
-
-        const totalInGroup = await Reservation.countDocuments({
-          slot: { $in: sameIds },
-          status: { $ne: "cancelled" },
-        });
-
-        g.totalInGroup = totalInGroup;
-        g.isFull = totalInGroup >= MAX_PER_TIME;
-      })
-    );
-
-    const dayMs = 24 * 60 * 60 * 1000;
-
-    slots.forEach((slot) => {
-      const idx = Math.floor(
-        (new Date(slot.date).setHours(0, 0, 0, 0) - monday.getTime()) / dayMs
-      );
-      if (idx < 0 || idx > 6) return;
-
-      const key = makeGroupKey(slot.date, slot.startTime);
-      const g = groupMap.get(key) || { isFull: false, totalInGroup: 0 };
-      const canBook = !g.isFull;
-
-      days[idx].slots.push({
-        ...slot,
-        isGroupFull: g.isFull,
-        totalInGroup: g.totalInGroup,
-        canBook,
-      });
-    });
-
+    // new.ejs で使う変数を渡す
     res.render("admin/reservations/new", {
-      teacherList,
-      selectedTeacher: teacherValue,
-      days,
-      monday,
-      sunday,
+      selectedSlotId: slotId,
+      selectedSlot,
+      slots: [], // 将来必要なら使う用。今はダミー。
     });
   } catch (err) {
     console.error(err);
