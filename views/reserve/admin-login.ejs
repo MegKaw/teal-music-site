@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>予約管理ログイン | TEAL MUSIC</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 480px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      .page-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      .login-card {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 16px 16px 20px;
+      }
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .field input {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        box-sizing: border-box;
+      }
+      .error {
+        margin-bottom: 12px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #fee2e2;
+        color: #b91c1c;
+        font-size: 13px;
+      }
+      .btn-row {
+        margin-top: 8px;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .btn-primary {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: none;
+        background: #0ea5e9;
+        color: #ffffff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .note {
+        margin-top: 12px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+
+    <main>
+      <h1 class="page-title">既存生徒予約管理ログイン</h1>
+
+      <div class="login-card">
+        <% if (error) { %>
+        <div class="error"><%= error %></div>
+        <% } %>
+
+        <form action="/reserve/admin-login" method="POST">
+          <div class="field">
+            <label for="adminId">ID</label>
+            <input type="text" id="adminId" name="adminId" required />
+          </div>
+
+          <div class="field">
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn-primary">ログイン</button>
+          </div>
+        </form>
+
+        <p class="note">
+          ※ この画面はTEAL MUSICスタッフ専用です。<br />
+          一般のお客様は体験レッスンお申し込みフォームからご予約ください。
+        </p>
+      </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

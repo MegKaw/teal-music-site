@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>空き枠一覧 - 管理画面</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 960px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 16px;
+      }
+      .top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: none;
+        background: #16a34a;
+        color: #fff;
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .btn-sm {
+        padding: 4px 10px;
+        font-size: 12px;
+      }
+      .btn-danger {
+        background: #dc2626;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th,
+      td {
+        border-bottom: 1px solid #e5e7eb;
+        padding: 6px 8px;
+        text-align: left;
+        vertical-align: middle;
+      }
+      th {
+        background: #f9fafb;
+        font-weight: 600;
+      }
+      tbody tr:nth-child(even) {
+        background: #f9fafb;
+      }
+      .no-data {
+        padding: 24px 0;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 14px;
+      }
+      .tag-teacher {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #eef2ff;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/header') %>
+
+    <main>
+      <div class="top-row">
+        <h1>空き枠一覧</h1>
+        <a href="/admin/slots/new" class="btn">＋ 新規登録</a>
+      </div>
+
+      <% if (!slots || slots.length === 0) { %>
+      <div class="no-data">現在、有効な空き枠はありません。</div>
+      <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>時間</th>
+            <th>講師</th>
+            <th>メモ</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% slots.forEach(function(slot){ %>
+          <tr>
+            <td>
+              <% const d = new Date(slot.date); const y = d.getFullYear(); const
+              m = String(d.getMonth() + 1).padStart(2, '0'); const day =
+              String(d.getDate()).padStart(2, '0'); const w =
+              ['日','月','火','水','木','金','土'][d.getDay()]; %> <%=
+              `${y}/${m}/${day} (${w})` %>
+            </td>
+            <td><%= slot.startTime %>〜<%= slot.endTime %></td>
+            <td>
+              <span class="tag-teacher"><%= slot.teacher %></span>
+            </td>
+            <td><%= slot.memo || '' %></td>
+            <td>
+              <a href="/admin/slots/<%= slot._id %>/edit" class="btn btn-sm">
+                編集
+              </a>
+
+              <form
+                action="/admin/slots/<%= slot._id %>/delete"
+                method="POST"
+                style="display: inline-block; margin-left: 4px"
+                onsubmit="return confirm('この枠を無効にしますか？');"
+              >
+                <button type="submit" class="btn btn-sm btn-danger">
+                  削除
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </main>
+
+    <%- include('../../partials/footer') %> <%-
+    include('../../partials/floating-cta') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

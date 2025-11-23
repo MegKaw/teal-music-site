@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>既存生徒レッスン予約（枠の選択）</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+
+      .page-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .filter-bar {
+        margin-bottom: 16px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+      }
+      .filter-row {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        align-items:center;
+      }
+      .filter-row label {
+        font-size:14px;
+        font-weight:600;
+      }
+      .filter-row select {
+        padding:6px 10px;
+        border-radius:8px;
+        border:1px solid #d1d5db;
+        font-size:14px;
+      }
+      .filter-row button {
+        padding:6px 12px;
+        border-radius:999px;
+        border:none;
+        background:#0ea5e9;
+        color:#ffffff;
+        font-size:14px;
+        cursor:pointer;
+      }
+
+      .week-nav {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:16px;
+        gap:8px;
+        flex-wrap:wrap;
+      }
+      .week-nav a {
+        padding:6px 10px;
+        border-radius:999px;
+        border:1px solid #ddd;
+        text-decoration:none;
+        font-size:14px;
+      }
+
+      .week-grid {
+        display:grid;
+        gap:12px;
+        grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+      }
+      .day-col {
+        border:1px solid #eee;
+        border-radius:10px;
+        padding:8px;
+        background:#fff;
+      }
+      .day-head {
+        font-weight:700;
+        font-size:14px;
+        margin-bottom:6px;
+      }
+      .slot-btn {
+        width:100%;
+        margin:4px 0;
+        padding:6px 8px;
+        border-radius:8px;
+        border:1px solid #ddd;
+        font-size:13px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        cursor:pointer;
+        background:#fff;
+      }
+      .slot-btn.free { border-color:#16a34a; color:#166534; }
+      .slot-btn.full {
+        border-color:#ccc;
+        color:#777;
+        background:#f5f5f5;
+        cursor:not-allowed;
+      }
+      .slot-btn span.mark { font-weight:700; }
+
+      .no-slot {
+        font-size:13px;
+        color:#aaa;
+        padding:12px 4px;
+        text-align:center;
+      }
+
+      .note {
+        font-size:12px;
+        color:#6b7280;
+        margin-top:8px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/header') %>
+
+    <main>
+      <h1 class="page-title">既存生徒レッスン予約（枠の選択）</h1>
+
+      <!-- 講師選択 -->
+      <form method="GET" action="/admin/reservations/new" class="filter-bar">
+        <div class="filter-row">
+          <label for="teacher">講師：</label>
+          <select id="teacher" name="teacher">
+            <option value="">選択してください</option>
+            <% teacherList.forEach(function(t){ %>
+              <option
+                value="<%= t.value %>"
+                <%= (selectedTeacher && selectedTeacher === t.value) ? 'selected' : '' %>
+              >
+                <%= t.label %>
+              </option>
+            <% }); %>
+          </select>
+
+          <button type="submit">この講師の空きを表示</button>
+        </div>
+      </form>
+
+      <%
+        function fmtDate(d) {
+          var dt = new Date(d);
+          var week = ['日','月','火','水','木','金','土'];
+          var w = week[dt.getDay()];
+          return (dt.getMonth()+1) + '/' + dt.getDate() + '（' + w + '）';
+        }
+        function toParam(d) {
+          var dt = new Date(d);
+          var y = dt.getFullYear();
+          var m = String(dt.getMonth()+1).padStart(2,'0');
+          var day = String(dt.getDate()).padStart(2,'0');
+          return y + '-' + m + '-' + day;
+        }
+        var prevWeek = new Date(monday);
+        prevWeek.setDate(monday.getDate() - 7);
+        var nextWeek = new Date(monday);
+        nextWeek.setDate(monday.getDate() + 7);
+      %>
+
+      <% if (!selectedTeacher) { %>
+        <p class="note">
+          まず上のプルダウンから講師を選択してください。
+        </p>
+      <% } else { %>
+        <div class="week-nav">
+          <a href="/admin/reservations/new?<%= 'teacher=' + encodeURIComponent(selectedTeacher) + '&date=' + toParam(prevWeek) %>">
+            ← 前の週
+          </a>
+
+          <div>
+            <strong><%= fmtDate(monday) %> 〜 <%= fmtDate(sunday) %></strong>
+          </div>
+
+          <a href="/admin/reservations/new?<%= 'teacher=' + encodeURIComponent(selectedTeacher) + '&date=' + toParam(nextWeek) %>">
+            次の週 →
+          </a>
+        </div>
+
+        <div class="week-grid">
+          <% days.forEach(function(day){ %>
+            <div class="day-col">
+              <div class="day-head"><%= fmtDate(day.date) %></div>
+
+              <% if (!day.slots || day.slots.length === 0) { %>
+                <div class="no-slot">空き枠なし</div>
+              <% } else { %>
+                <% day.slots.forEach(function(slot){ %>
+                  <form method="GET" action="/admin/reservations/create">
+                    <input type="hidden" name="slotId" value="<%= slot._id %>">
+
+                    <button
+                      type="submit"
+                      class="slot-btn <%= slot.canBook ? 'free' : 'full' %>"
+                      <%= slot.canBook ? '' : 'disabled' %>
+                    >
+                      <span><%= slot.startTime %>〜<%= slot.endTime %></span>
+                      <span class="mark"><%= slot.canBook ? '◯' : '×' %></span>
+                    </button>
+                  </form>
+                <% }) %>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+
+        <p class="note">
+          ※ 「×」の枠は、同じ時間帯にすでに <%= 2 %> 件の予約が入っています。<br />
+          ※ 空き枠は、先に「空き枠管理」から登録してください。
+        </p>
+      <% } %>
+    </main>
+
+    <%- include('../../partials/footer') %>
+  </body>
+</html>

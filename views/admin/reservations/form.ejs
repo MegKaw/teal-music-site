@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>レッスン予約（管理用） - 入力</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 16px;
+      }
+      .slot-info {
+        padding: 10px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        background: #eef2ff;
+        font-size: 14px;
+      }
+      form .field {
+        margin-bottom: 12px;
+      }
+      form label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 4px;
+        font-weight: 600;
+      }
+      form input,
+      form textarea,
+      form select {
+        width: 100%;
+        padding: 6px 8px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+      form textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .btn-row {
+        margin-top: 16px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: none;
+        background: #16a34a;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .btn-secondary {
+        background: #6b7280;
+        text-decoration: none;
+        margin-left: 8px;
+        line-height: 32px;
+        padding: 6px 16px;
+      }
+      .note {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/header') %>
+
+    <main>
+      <h1>レッスン予約（既存生徒・管理用）</h1>
+
+      <div class="slot-info">
+        <p>
+          日付： <% const dt = new Date(slot.date); const y = dt.getFullYear();
+          const m = String(dt.getMonth()+1).padStart(2,'0'); const d =
+          String(dt.getDate()).padStart(2,'0'); const w =
+          ['日','月','火','水','木','金','土'][dt.getDay()]; %>
+          <strong><%= `${y}/${m}/${d} (${w})` %></strong>
+        </p>
+        <p>時間：<strong><%= slot.startTime %>〜<%= slot.endTime %></strong></p>
+        <p>講師：<strong><%= slot.teacher %></strong></p>
+      </div>
+
+      <form method="POST" action="/admin/reservations">
+        <input type="hidden" name="slotId" value="<%= slot._id %>" />
+        <input type="hidden" name="type" value="<%= type || 'regular' %>" />
+
+        <% const cs = selectableCourses || []; %> <% if (cs.length > 0) { %>
+        <div class="field">
+          <label for="course">コース</label>
+          <select id="course" name="course">
+            <% cs.forEach(function(c){ %>
+            <option value="<%= c.id %>"><%= c.label %></option>
+            <% }) %>
+          </select>
+          <div class="note">
+            この講師が担当できるコースのみ表示されています。
+          </div>
+        </div>
+        <% } else { %>
+        <!-- 担当コース未設定の講師の場合 -->
+        <input type="hidden" name="course" value="" />
+        <% } %>
+
+        <div class="field">
+          <label for="name">生徒氏名</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div class="field">
+          <label for="note">備考（任意）</label>
+          <textarea id="note" name="note"></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn">予約を登録する</button>
+          <a href="/admin/reservations/select" class="btn-secondary">戻る</a>
+        </div>
+      </form>
+    </main>
+
+    <%- include('../../partials/footer') %> <%-
+    include('../../partials/floating-cta') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

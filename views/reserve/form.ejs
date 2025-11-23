@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>体験レッスンお申し込み</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        font-size: 14px;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+      }
+      .info-table th,
+      .info-table td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .info-table th {
+        width: 30%;
+        background: #f9fafb;
+        text-align: left;
+        color: #4b5563;
+        font-weight: 600;
+      }
+      .info-table tr:last-child th,
+      .info-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .form-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 24px 0 12px;
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .field input,
+      .field textarea {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        box-sizing: border-box;
+      }
+      .field small {
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: center; /* 中央寄せ */
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .btn-secondary {
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        color: #374151;
+      }
+      .btn-primary {
+        padding: 8px 20px;
+        border-radius: 999px;
+        border: none;
+        background: #0ea5e9;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+
+    <main>
+      <h1 class="section-title">体験レッスンのお申し込み</h1>
+
+      <!-- 上部：確認用情報テーブル -->
+      <h2 class="form-section-title">ご予約内容の確認</h2>
+      <table class="info-table">
+        <tr>
+          <th>コース</th>
+          <td><%= courseLabel %></td>
+        </tr>
+        <tr>
+          <th>日付</th>
+          <td><%= dateLabel %></td>
+        </tr>
+        <tr>
+          <th>時間</th>
+          <td><%= slot.startTime %>〜<%= slot.endTime %></td>
+        </tr>
+        <tr>
+          <th>担当講師</th>
+          <td><%= slot.teacher %></td>
+        </tr>
+      </table>
+
+      <!-- 下部：生徒情報入力フォーム -->
+      <h2 class="form-section-title">お客様情報の入力</h2>
+
+      <form action="/reserve/submit" method="POST">
+        <!-- 必須のhidden -->
+        <input type="hidden" name="slotId" value="<%= slot._id %>" />
+        <input type="hidden" name="course" value="<%= course || '' %>" />
+        <input type="hidden" name="type" value="<%= type || 'trial' %>" />
+
+        <div class="field">
+          <label for="name">お名前（必須）</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="field">
+          <label for="email">メールアドレス（必須）</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+          />
+          <small>体験レッスンのご案内をお送りするために使用します。</small>
+        </div>
+
+        <div class="field">
+          <label for="phone">お電話番号（任意）</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" />
+          <small>急なご連絡が必要な場合のみ使用します。</small>
+        </div>
+
+        <div class="field">
+          <label for="note">ご希望・ご質問など（任意）</label>
+          <textarea id="note" name="note" rows="4"></textarea>
+        </div>
+
+        <div class="btn-row">
+          <a href="javascript:history.back()" class="btn-secondary"> もどる </a>
+          <button type="submit" class="btn-primary">この内容で申し込む</button>
+        </div>
+      </form>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>

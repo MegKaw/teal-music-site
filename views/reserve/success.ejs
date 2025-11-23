@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ご予約ありがとうございます</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main.reserve-success {
+        max-width: 720px;
+        margin: 80px auto 40px;
+        padding: 0 16px 40px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        text-align: center;
+      }
+      .reserve-success h1 {
+        font-size: 1.6rem;
+        margin-bottom: 16px;
+      }
+      .reserve-success p {
+        margin: 8px 0;
+        color: #444;
+        line-height: 1.7;
+      }
+      .reserve-success .highlight {
+        font-weight: 600;
+        color: #0f766e;
+      }
+      .reserve-success .back-link {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: 1px solid #0f766e;
+        color: #0f766e;
+        text-decoration: none;
+        font-size: 0.95rem;
+      }
+      .reserve-success .back-link:hover {
+        background: #0f766e;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <% /* 共通ヘッダー */ %> <%- include('../partials/header') %>
+
+    <main class="reserve-success">
+      <h1>ご予約ありがとうございます</h1>
+
+      <% if (typeof name !== 'undefined' && name) { %>
+      <p>
+        <span class="highlight"><%= name %> 様</span>のご予約を受け付けました。
+      </p>
+      <% } else { %>
+      <p>ご予約を受け付けました。</p>
+      <% } %>
+
+      <p>
+        ご入力いただいたメールアドレス宛に、<br />
+        確認のメールをお送りしました。
+      </p>
+      <p style="font-size: 0.9rem; color: #666">
+        ※ 現在はシステム準備中のため、実際のメール送信はテスト段階です。
+      </p>
+
+      <a href="/" class="back-link">トップページへ戻る</a>
+    </main>
+
+    <% /* 共通フッター & CTA */ %> <%- include('../partials/footer') %>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>

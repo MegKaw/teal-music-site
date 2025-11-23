@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>予約一覧 - 管理画面</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 960px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 16px;
+      }
+      .top-actions {
+        margin-bottom: 16px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: none;
+        background: #16a34a;
+        color: #fff;
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 6px 8px;
+        vertical-align: top;
+      }
+      th {
+        background: #f5f5f5;
+        white-space: nowrap;
+      }
+      .status-pending {
+        color: #b45309;
+        font-weight: 700;
+      }
+      .status-confirmed {
+        color: #15803d;
+        font-weight: 700;
+      }
+      .status-cancelled {
+        color: #6b7280;
+        font-weight: 700;
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/header') %>
+
+    <main>
+      <h1>予約一覧</h1>
+
+      <div class="top-actions">
+        <a href="/admin/reservations/new" class="btn"
+          >予約を新規登録（既存生徒など）</a
+        >
+      </div>
+
+      <% if (!reservations || reservations.length === 0) { %>
+      <p>現在、予約データはありません。</p>
+      <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>申込日時</th>
+            <th>レッスン日時</th>
+            <th>種別</th>
+            <th>コース</th>
+            <th>お名前</th>
+            <th>連絡先</th>
+            <th>ステータス</th>
+            <th>メモ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% const fmtDateTime = (d) => { if (!d) return ''; const dt = new
+          Date(d); const y = dt.getFullYear(); const m = String(dt.getMonth() +
+          1).padStart(2, '0'); const day = String(dt.getDate()).padStart(2,
+          '0'); const hh = String(dt.getHours()).padStart(2, '0'); const mm =
+          String(dt.getMinutes()).padStart(2, '0'); return `${y}/${m}/${day}
+          ${hh}:${mm}`; }; const fmtDate = (d) => { if (!d) return ''; const dt
+          = new Date(d); const y = dt.getFullYear(); const m =
+          String(dt.getMonth() + 1).padStart(2, '0'); const day =
+          String(dt.getDate()).padStart(2, '0'); const w =
+          ['日','月','火','水','木','金','土'][dt.getDay()]; return
+          `${y}/${m}/${day} (${w})`; }; %> <% reservations.forEach(function(r){
+          %>
+          <tr>
+            <td><%= fmtDateTime(r.createdAt) %></td>
+
+            <td>
+              <% if (r.slot) { %>
+              <div><%= fmtDate(r.slot.date) %></div>
+              <div><%= r.slot.startTime %>〜<%= r.slot.endTime %></div>
+              <div><small><%= r.slot.teacher %></small></div>
+              <% } else { %>
+              <em>枠情報なし</em>
+              <% } %>
+            </td>
+
+            <td><%= r.type === 'trial' ? '体験' : '通常' %></td>
+            <td><%= r.course || '' %></td>
+
+            <td><%= r.name %></td>
+
+            <td>
+              <div><%= r.email %></div>
+              <% if (r.phone) { %>
+              <div><%= r.phone %></div>
+              <% } %>
+            </td>
+
+            <td>
+              <% if (r.status === 'pending') { %>
+              <span class="status-pending">未対応</span>
+              <% } else if (r.status === 'confirmed') { %>
+              <span class="status-confirmed">確定</span>
+              <% } else if (r.status === 'cancelled') { %>
+              <span class="status-cancelled">キャンセル</span>
+              <% } else { %> <%= r.status %> <% } %>
+            </td>
+
+            <td><%= r.note || '' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </main>
+
+    <%- include('../../partials/footer') %> <%-
+    include('../../partials/floating-cta') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

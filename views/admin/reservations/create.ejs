@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>既存生徒レッスン予約入力（管理画面）</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 720px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      .page-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        font-size: 14px;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+      }
+      .info-table th,
+      .info-table td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .info-table th {
+        width: 30%;
+        background: #f9fafb;
+        text-align: left;
+        color: #4b5563;
+        font-weight: 600;
+      }
+      .info-table tr:last-child th,
+      .info-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 24px 0 12px;
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .field input,
+      .field textarea,
+      .field select {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        box-sizing: border-box;
+      }
+      .field small {
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .btn {
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .btn-secondary {
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #374151;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-primary {
+        background: #0ea5e9;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/header') %>
+
+    <main>
+      <h1 class="page-title">既存生徒レッスン予約入力</h1>
+
+      <h2 class="section-title">予約内容の確認</h2>
+      <table class="info-table">
+        <tr>
+          <th>日付</th>
+          <td><%= dateLabel %></td>
+        </tr>
+        <tr>
+          <th>時間</th>
+          <td><%= slot.startTime %>〜<%= slot.endTime %></td>
+        </tr>
+        <tr>
+          <th>担当講師</th>
+          <td><%= slot.teacher %></td>
+        </tr>
+        <tr>
+          <th>種別</th>
+          <td>通常レッスン（regular）</td>
+        </tr>
+      </table>
+
+      <h2 class="section-title">生徒情報</h2>
+
+      <form action="/admin/reservations" method="POST">
+        <input type="hidden" name="slotId" value="<%= slot._id %>" />
+
+        <div class="field">
+          <label for="teacher">担当講師</label>
+          <select id="teacher" name="teacher" disabled>
+            <option value="<%= slot.teacher %>" selected>
+              <%= slot.teacher %>
+            </option>
+          </select>
+          <small>※ この時間帯の空きとして登録されている講師です。</small>
+        </div>
+
+        <div class="field">
+          <label for="course">コース</label>
+          <select id="course" name="course">
+            <% if (!courseOptions || courseOptions.length === 0) { %>
+            <option value="">（コース未登録）</option>
+            <% } else { %> <% courseOptions.forEach(function(c){ %>
+            <option value="<%= c.id %>"><%= c.label %></option>
+            <% }); %> <% } %>
+          </select>
+          <small>講師に紐づいているコースから選択してください。</small>
+        </div>
+
+        <div class="field">
+          <label for="name">生徒名（必須）</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div class="field">
+          <label for="note">備考（任意）</label>
+          <textarea
+            id="note"
+            name="note"
+            rows="4"
+            placeholder="例）〇〇さん、振替分1回目／ペアレッスン など"
+          ></textarea>
+        </div>
+
+        <div class="btn-row">
+          <a href="/admin/reservations/new" class="btn btn-secondary">
+            枠の選択に戻る
+          </a>
+          <button type="submit" class="btn btn-primary">
+            この内容で予約を追加
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <%- include('../../partials/footer') %>
+  </body>
+</html>

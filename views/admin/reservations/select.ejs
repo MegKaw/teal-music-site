@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>レッスン予約（管理用） - 空き状況</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+
+    .week-nav {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .week-nav a {
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #ddd;
+      text-decoration:none;
+      font-size:14px;
+    }
+
+    .course-label {
+      font-size:14px;
+      color:#555;
+      margin-bottom:8px;
+    }
+
+    .week-grid {
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    }
+    .day-col {
+      border:1px solid #eee;
+      border-radius:10px;
+      padding:8px;
+      background:#fff;
+    }
+    .day-head {
+      font-weight:700;
+      font-size:14px;
+      margin-bottom:6px;
+    }
+    .slot-btn {
+      width:100%;
+      margin:4px 0;
+      padding:6px 8px;
+      border-radius:8px;
+      border:1px solid #ddd;
+      font-size:13px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      cursor:pointer;
+      background:#fff;
+    }
+    .slot-btn.free { border-color:#16a34a; color:#166534; }
+    .slot-btn.full {
+      border-color:#ccc;
+      color:#777;
+      background:#f5f5f5;
+      cursor:not-allowed;
+    }
+    .slot-btn span.mark { font-weight:700; }
+
+    .no-slot {
+      font-size:13px;
+      color:#aaa;
+      padding:12px 4px;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../../partials/header') %>
+
+  <main>
+    <h1>レッスン予約（管理用）</h1>
+
+    <div class="course-label">
+      <% if (course) { %>
+        コース：<strong><%= course %></strong>
+      <% } else { %>
+        コース未選択（必要ならURLに <code>?course=vocal</code> などを付与）
+      <% } %>
+    </div>
+
+    <%
+      const fmtDate = (d) => {
+        const dt = new Date(d);
+        const w = ['日','月','火','水','木','金','土'][dt.getDay()];
+        return `${dt.getMonth()+1}/${dt.getDate()}(${w})`;
+      };
+      const toParam = (d) => {
+        const dt = new Date(d);
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth()+1).padStart(2,'0');
+        const day = String(dt.getDate()).padStart(2,'0');
+        return `${y}-${m}-${day}`;
+      };
+      const prevWeek = new Date(monday); prevWeek.setDate(monday.getDate()-7);
+      const nextWeek = new Date(monday); nextWeek.setDate(monday.getDate()+7);
+    %>
+
+    <div class="week-nav">
+      <a href="/admin/reservations/select?<%=
+        `date=${toParam(prevWeek)}${course ? '&course='+encodeURIComponent(course) : ''}`
+      %>">← 前の週</a>
+
+      <div>
+        <strong><%= fmtDate(monday) %> 〜 <%= fmtDate(sunday) %></strong>
+      </div>
+
+      <a href="/admin/reservations/select?<%=
+        `date=${toParam(nextWeek)}${course ? '&course='+encodeURIComponent(course) : ''}`
+      %>">次の週 →</a>
+    </div>
+
+    <div class="week-grid">
+      <% days.forEach(function(day){ %>
+        <div class="day-col">
+          <div class="day-head"><%= fmtDate(day.date) %></div>
+
+          <% if (!day.slots || day.slots.length === 0) { %>
+            <div class="no-slot">空き枠なし</div>
+          <% } else { %>
+            <% day.slots.forEach(function(slot){ %>
+              <form method="GET" action="/admin/reservations/form">
+                <input type="hidden" name="slotId" value="<%= slot._id %>">
+                <input type="hidden" name="course" value="<%= course || '' %>">
+                <input type="hidden" name="type" value="regular">
+
+                <button
+                  type="submit"
+                  class="slot-btn <%= (!slot.canBook) ? 'full' : 'free' %>"
+                  <%= (!slot.canBook) ? 'disabled' : '' %>
+                >
+                  <span><%= slot.startTime %>〜<%= slot.endTime %></span>
+                  <span class="mark">
+                    <% if (!slot.canBook) { %>
+                      ×
+                    <% } else { %>
+                      ◯
+                    <% } %>
+                  </span>
+                </button>
+              </form>
+            <% }) %>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+
+  <%- include('../../partials/footer') %>
+  <%- include('../../partials/floating-cta') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

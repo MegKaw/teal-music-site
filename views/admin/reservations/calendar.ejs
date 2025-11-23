@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>レッスンカレンダー | TEAL MUSIC</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      main {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      .page-title-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .page-title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .month-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+      .month-nav a {
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid #d1d5db;
+        text-decoration: none;
+        font-size: 12px;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+      }
+      .btn-link {
+        padding: 4px 10px;
+        font-size: 12px;
+        border-radius: 999px;
+        border: 1px solid #d1d5db;
+        text-decoration: none;
+        background: #ffffff;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .legend-color {
+        display: inline-block;
+        width: 16px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1px solid #d1d5db;
+      }
+
+      .calendar {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+      .calendar-header {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(100px, 1fr));
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .calendar-header div {
+        padding: 6px 8px;
+        font-size: 12px;
+        text-align: center;
+        font-weight: 600;
+      }
+      .calendar-body {
+        display: flex;
+        flex-direction: column;
+      }
+      .week-row {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(100px, 1fr));
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .week-row:last-child {
+        border-bottom: none;
+      }
+      .day-cell {
+        border-right: 1px solid #e5e7eb;
+        min-height: 180px;
+        font-size: 11px;
+        box-sizing: border-box;
+        padding: 4px;
+      }
+      .week-row .day-cell:last-child {
+        border-right: none;
+      }
+      .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 2px;
+      }
+      .day-date {
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .day-outside {
+        color: #9ca3af;
+      }
+
+      .day-timeline {
+        margin-top: 2px;
+      }
+      .time-row {
+        display: flex;
+        align-items: stretch;
+        margin-bottom: 2px;
+      }
+      .time-label {
+        width: 34px;
+        font-size: 10px;
+        color: #6b7280;
+      }
+      .time-slots {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+      .slot-box {
+        flex: 1 1 48%;
+        min-width: 48px;
+        border-radius: 3px;
+        border: 1px solid #e5e7eb;
+        padding: 2px 3px;
+        box-sizing: border-box;
+        background: #f9fafb;
+      }
+      .slot-box-free {
+        background: #ffffff; /* 空きは白背景 */
+      }
+      .slot-box-full {
+        background: #fee2e2;
+        border-color: #ef4444;
+      }
+      .slot-box-closed {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+        color: #9ca3af;
+      }
+      .slot-main {
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+      .slot-main-trial {
+        color: #ef4444; /* 体験（trial）の生徒名だけ赤 */
+      }
+      .slot-sub {
+        font-size: 9px;
+        line-height: 1.2;
+      }
+      .slot-teacher {
+        font-size: 9px;
+        line-height: 1.2;
+        color: #6b7280;
+      }
+
+      /* 講師ごとの色（枠線カラー）最大5人想定 */
+      /* 0: 川崎 → 緑 */
+      .teacher-color-0 {
+        border-color: #22c55e;
+      }
+      /* 1: 益井 → 黄色 */
+      .teacher-color-1 {
+        border-color: #eab308;
+      }
+      /* 2: 益山 → 青 */
+      .teacher-color-2 {
+        border-color: #3b82f6;
+      }
+      /* 3: 坂井 → オレンジ */
+      .teacher-color-3 {
+        border-color: #f97316;
+      }
+      /* 4: 依田 → 紫 */
+      .teacher-color-4 {
+        border-color: #a855f7;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/header') %>
+
+    <main>
+      <div class="page-title-wrap">
+        <div class="page-title">レッスンカレンダー</div>
+        <div class="month-nav">
+          <a href="/admin/reservations/calendar?month=<%= prevMonth %>"
+            >← 前の月</a
+          >
+          <span><%= year %>年 <%= displayMonth %>月</span>
+          <a href="/admin/reservations/calendar?month=<%= nextMonth %>"
+            >次の月 →</a
+          >
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <a href="/admin/slots/new" class="btn-link"> 講師の空きを登録する </a>
+        <a href="/admin/reservations/new" class="btn-link">
+          講師別で新規予約を登録する
+        </a>
+      </div>
+
+      <!-- 講師カラー凡例 -->
+      <div class="legend">
+        <% var teacherNames = []; if (typeof teacherColorMap !== 'undefined' &&
+        teacherColorMap) { teacherNames = Object.keys(teacherColorMap); } for
+        (var i = 0; i < teacherNames.length; i++) { var tName = teacherNames[i];
+        var idx = teacherColorMap[tName]; %>
+        <div class="legend-item">
+          <span class="legend-color teacher-color-<%= idx %>"></span>
+          <span><%= tName %></span>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="calendar">
+        <div class="calendar-header">
+          <% var wnames = ["日","月","火","水","木","金","土"]; for (var w = 0;
+          w < 7; w++) { %>
+          <div><%= wnames[w] %></div>
+          <% } %>
+        </div>
+
+        <div class="calendar-body">
+          <% for (var wIdx = 0; wIdx < weeks.length; wIdx++) { var week =
+          weeks[wIdx]; %>
+          <div class="week-row">
+            <% for (var dIdx = 0; dIdx < week.length; dIdx++) { var day =
+            week[dIdx]; var dt = new Date(day); dt.setHours(0,0,0,0); var
+            isCurrentMonth = (dt.getMonth() === currentMonthStart.getMonth());
+            var dDate = dt.getDate(); var y = dt.getFullYear(); var m =
+            String(dt.getMonth()+1).padStart(2,'0'); var dd =
+            String(dt.getDate()).padStart(2,'0'); var dateKey = y + "-" + m +
+            "-" + dd; var dayData = (calendarData && calendarData[dateKey]) ?
+            calendarData[dateKey] : null; %>
+            <div class="day-cell">
+              <div class="day-header">
+                <span
+                  class="day-date <%= isCurrentMonth ? '' : 'day-outside' %>"
+                >
+                  <%= dDate %>
+                </span>
+              </div>
+
+              <div class="day-timeline">
+                <% for (var hh = 10; hh <= 20; hh++) { var hhStr = (hh < 10 ?
+                '0' + hh : '' + hh) + ":00"; var group = (dayData &&
+                dayData[hhStr]) ? dayData[hhStr] : null; var isFullGroup = group
+                && group.reservedCount >= MAX_PER_TIME; %>
+                <div class="time-row">
+                  <div class="time-label"><%= hh %></div>
+                  <div class="time-slots">
+                    <% if (group && group.slots && group.slots.length) { %> <%
+                    for (var sIdx = 0; sIdx < group.slots.length; sIdx++) { var
+                    slot = group.slots[sIdx]; var hasRes = slot.hasReservation;
+                    var res = slot.reservation; var studentName = (res &&
+                    res.name) ? res.name : ""; var note = (res && res.note) ?
+                    res.note : ""; var isTrial = (res && res.type === 'trial');
+                    var tIdx = (teacherColorMap && typeof
+                    teacherColorMap[slot.teacher] !== 'undefined') ?
+                    teacherColorMap[slot.teacher] : null; %>
+                    <div
+                      class="slot-box <%= hasRes ? ' slot-box-full' : (isFullGroup ? ' slot-box-closed' : ' slot-box-free') %><%= tIdx !== null ? (' teacher-color-' + tIdx) : '' %>"
+                    >
+                      <% if (hasRes) { %>
+                      <div
+                        class="slot-main <%= isTrial ? 'slot-main-trial' : '' %>"
+                      >
+                        <%= studentName %>
+                      </div>
+                      <% if (note) { %>
+                      <div class="slot-sub"><%= note %></div>
+                      <% } %>
+                      <div class="slot-teacher"><%= slot.teacher %></div>
+                      <% } else if (isFullGroup) { %>
+                      <div class="slot-main">×</div>
+                      <div class="slot-teacher"><%= slot.teacher %></div>
+                      <% } else { %>
+                      <div class="slot-main">空き</div>
+                      <div class="slot-teacher"><%= slot.teacher %></div>
+                      <% } %>
+                    </div>
+                    <% } %> <% } %>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+            </div>
+            <% } %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+
+    <%- include('../../partials/footer') %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

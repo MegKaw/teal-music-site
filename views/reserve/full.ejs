@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>満席のご案内</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+
+    <main style="max-width: 640px; margin: 24px auto; padding: 0 16px">
+      <h1>この時間帯はすでに予約済です</h1>
+      <p>申し訳ありません。この時間帯はすでに予約が埋まってしまいました。</p>
+      <p><a href="/reserve">もう一度はじめから別の枠をお選びください。</a></p>
+    </main>
+
+    <%- include('../partials/footer') %> <%- include('../partials/floating-cta')
+    %>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
